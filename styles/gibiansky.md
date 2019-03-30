@@ -44,6 +44,7 @@ import qualified Control.Monad.Trans.State (State, evalState, execState, get
 import qualified Data.Map as Map
 import qualified Data.Text as Text
 import           Prelude hiding (map)
+import           MyModule
 
 -- Data declarations
 data Enum = CaseA

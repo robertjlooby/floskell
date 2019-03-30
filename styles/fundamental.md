@@ -45,6 +45,7 @@ import qualified Control.Monad.Trans.State
        (State, evalState, execState, get, modify, put, runState)
 import qualified Data.Map as Map
 import qualified Data.Text as Text
+import MyModule
 import Prelude hiding (map)
 
 -- Data declarations

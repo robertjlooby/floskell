@@ -43,6 +43,7 @@ import qualified Control.Monad.Trans.State (State,evalState,execState,get,modify
 import qualified Data.Map as Map
 import qualified Data.Text as Text
 import Prelude hiding (map)
+import MyModule
 
 -- Data declarations
 data Enum=CaseA|CaseB|CaseC deriving(Eq,Enum,Show)
