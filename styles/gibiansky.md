@@ -82,6 +82,16 @@ lorem =
   , "Duis eget magna non purus imperdiet molestie nec quis mauris."
   , "Praesent blandit quam vel arcu pellentesque, id aliquet turpis faucibus."]
 
+spec = do
+  describe "isEmpty"
+    $ do
+      it "for an empty queue"
+        $ do
+          isEmpty empty `shouldBe` True
+      it "for a non-empty queue"
+        $ property
+        $ \(NonEmpty xs) -> isEmpty (queue xs :: Queue Integer) === False
+
 -- Functions
 facs :: [Int]
 facs = [1, 1] ++ zipWith (+) (tailfacs)
