@@ -371,6 +371,121 @@ johanTibellCfg = safeConfig $
                               , cfgOptionPreserveVerticalSpace = False
                               }
 
+loobyCfg :: Config
+loobyCfg = safeConfig $
+    defaultConfig { cfgAlign
+                  , cfgIndent
+                  , cfgLayout
+                  , cfgOp
+                  , cfgGroup
+                  , cfgOptions
+                  }
+  where
+    cfgAlign = AlignConfig { cfgAlignLimits       = (10, 25)
+                           , cfgAlignCase         = False
+                           , cfgAlignClass        = False
+                           , cfgAlignImportModule = True
+                           , cfgAlignImportSpec   = False
+                           , cfgAlignLetBinds     = False
+                           , cfgAlignRecordFields = False
+                           , cfgAlignWhere        = False
+                           }
+
+    cfgIndent =
+        IndentConfig { cfgIndentOnside = 4
+                     , cfgIndentDeriving = 4
+                     , cfgIndentWhere = 2
+                     , cfgIndentApp = IndentBy 4
+                     , cfgIndentCase = IndentBy 4
+                     , cfgIndentClass = IndentBy 4
+                     , cfgIndentDo = IndentBy 4
+                     , cfgIndentIf = IndentBy 4
+                     , cfgIndentLet = Align
+                     , cfgIndentLetBinds = Align
+                     , cfgIndentLetIn = Align
+                     , cfgIndentMultiIf = IndentBy 2
+                     , cfgIndentTypesig = Align
+                     , cfgIndentWhereBinds = IndentBy 2
+                     , cfgIndentExportSpecList = IndentBy 2
+                     , cfgIndentImportSpecList = AlignOrIndentBy 7
+                     }
+
+    cfgLayout = LayoutConfig { cfgLayoutApp = TryOneline
+                             , cfgLayoutConDecls = Vertical
+                             , cfgLayoutDeclaration = TryOneline
+                             , cfgLayoutExportSpecList = Vertical
+                             , cfgLayoutIf = Vertical
+                             , cfgLayoutImportSpecList = Flex
+                             , cfgLayoutInfixApp = TryOneline
+                             , cfgLayoutLet = Vertical
+                             , cfgLayoutListComp = Flex
+                             , cfgLayoutRecord = Vertical
+                             , cfgLayoutTypesig = TryOneline
+                             }
+
+    cfgOp =
+        OpConfig ConfigMap { cfgMapDefault   = Whitespace WsBoth WsBefore False
+                           , cfgMapOverrides = Map.fromList opWsOverrides
+                           }
+
+    opWsOverrides =
+        [ (ConfigMapKey (Just ",") Nothing, Whitespace WsAfter WsBefore False)
+        , ( ConfigMapKey (Just "record") Nothing
+          , Whitespace WsAfter WsAfter True
+          )
+        , ( ConfigMapKey (Just ".") (Just Type)
+          , Whitespace WsAfter WsAfter False
+          )
+        , (ConfigMapKey (Just "$") Nothing, Whitespace WsBoth WsAfter False)
+        , (ConfigMapKey (Just "=") Nothing, Whitespace WsBoth WsAfter False)
+        , ( ConfigMapKey (Just "->") (Just Expression)
+          , Whitespace WsBoth WsAfter False
+          )
+        , ( ConfigMapKey (Just "record") (Just Pattern)
+          , Whitespace WsAfter WsAfter False
+          )
+        ]
+
+    cfgGroup =
+        GroupConfig ConfigMap { cfgMapDefault   =
+                                    Whitespace WsBoth WsAfter False
+                              , cfgMapOverrides = Map.fromList groupWsOverrides
+                              }
+
+    groupWsOverrides = [ ( ConfigMapKey (Just "(") (Just Type)
+                         , Whitespace WsNone WsAfter False
+                         )
+                       , ( ConfigMapKey (Just "[") (Just Type)
+                         , Whitespace WsNone WsAfter False
+                         )
+                       ]
+
+    cfgOptions =
+        OptionConfig { cfgOptionSortPragmas           = True
+                     , cfgOptionSplitLanguagePragmas  = True
+                     , cfgOptionSortImports           =
+                           SortImportsByGroups [ ImportsGroup [ "Control"
+                                                              , "Data"
+                                                              , "Debug"
+                                                              , "Foreign"
+                                                              , "GHC"
+                                                              , "Numeric"
+                                                              , "Prelude"
+                                                              , "System"
+                                                              , "Text"
+                                                              , "Type"
+                                                              , "Unsafe"
+                                                              ]
+                                                              ImportsGroupSorted
+                                               , ImportsGroup [ "" ]
+                                                              ImportsGroupSorted
+                                               ]
+                     , cfgOptionSortImportLists       = True
+                     , cfgOptionAlignSumTypeDecl      = True
+                     , cfgOptionFlexibleOneline       = True
+                     , cfgOptionPreserveVerticalSpace = True
+                     }
+
 -- | Base style definition.
 base :: Style
 base = Style { styleName        = "base"
@@ -407,6 +522,13 @@ johanTibell = Style { styleName        = "johan-tibell"
                     , styleConfig      = johanTibellCfg
                     }
 
+looby :: Style
+looby = Style { styleName        = "looby"
+              , styleAuthor      = "Rob Looby"
+              , styleDescription = "Rob Looby's style"
+              , styleConfig      = loobyCfg
+              }
+
 -- | Styles list, useful for programmatically choosing.
 styles :: [Style]
-styles = [ base, chrisDone, johanTibell, gibiansky, cramer ]
+styles = [ base, chrisDone, johanTibell, looby, gibiansky, cramer ]
